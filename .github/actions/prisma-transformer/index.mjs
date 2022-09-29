@@ -9005,16 +9005,17 @@ var __webpack_exports__ = {};
 "use strict";
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9022);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2742);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5622);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5747);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(5622);
 
 
 
 
 
 async function run() {
-  console.log("Current path", path__WEBPACK_IMPORTED_MODULE_2__.resolve());
+  console.log("Current path", path__WEBPACK_IMPORTED_MODULE_3__.resolve());
   console.log("Current directory", process.cwd());
-  console.log("Directory contents", fs.readdirSync(process.cwd()));
+  console.log("Directory contents", fs__WEBPACK_IMPORTED_MODULE_2__.readdirSync(process.cwd()));
 }
 
 run();

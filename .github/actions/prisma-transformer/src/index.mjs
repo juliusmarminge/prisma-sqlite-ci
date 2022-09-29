@@ -1,6 +1,6 @@
 import github from "@actions/github";
 import core from "@actions/core";
-
+import fs from "fs";
 import path from "path";
 
 async function run() {
