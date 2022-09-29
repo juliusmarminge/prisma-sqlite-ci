@@ -1,0 +1,16 @@
+name: Migrate your Prisma schema to sqlite
+on:
+  push:
+
+jobs:
+  migrate-sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: "Run migration script"
+        run: node ./.github/actions/prisma-transformer/index.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
