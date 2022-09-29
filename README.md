@@ -1,6 +1,7 @@
-Test repo for a custom Github Action that transforms a Prisma schema to use SQLite for CI
+# prisma-sqlite-ci
 
-# Prisma SQLite Transformer
+> Info:
+> Test repo for a custom Github Action that transforms a Prisma schema to use SQLite for CI
 
 Starting up postgres containers in CI takes a lot of time.
 
