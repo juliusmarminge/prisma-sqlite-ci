@@ -9012,20 +9012,6 @@ var __webpack_exports__ = {};
 
 
 async function run() {
-  const myToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("GITHUB_TOKEN");
-  const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(myToken);
-
-  const { data: pullRequest } = await octokit.rest.pulls.get({
-    owner: "octokit",
-    repo: "rest.js",
-    pull_number: 123,
-    mediaType: {
-      format: "diff",
-    },
-  });
-
-  console.log(pullRequest);
-
   console.log("Current path", path__WEBPACK_IMPORTED_MODULE_2__.resolve());
   console.log("Current directory", process.cwd());
   console.log("Directory contents", fs.readdirSync(process.cwd()));
