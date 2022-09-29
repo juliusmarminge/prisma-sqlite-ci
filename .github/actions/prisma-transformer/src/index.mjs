@@ -1,49 +1,52 @@
-import github from "@actions/github";
-import core from "@actions/core";
 import fs from "fs";
 import path from "path";
 
 const PRISMA_PATH = "prisma/schema.prisma";
+const REPLACE_DBS = ["postgres", "mysql"];
+const SQLITE_DB_NAME = '"file:./dev.db"';
+const OUT_PATH = "prisma/_sqlite/schema.prisma";
+
+// create directories on the way if they dont exist
+function writeFileSyncRecursive(filePath, content) {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(filePath, content, "utf8");
+}
 
 async function run() {
   const cwd = process.cwd();
   const prismaPath = path.join(cwd, PRISMA_PATH);
   const prisma = fs.readFileSync(prismaPath, "utf8");
 
-  // Remove spaces
   const lines = prisma
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean) // Remove empty lines
     .filter((l) => !l.startsWith("//")); // Remove comments
 
-  console.log(lines);
+  const transformed = lines
+    .map((line) => {
+      const tokens = line.split(" ").filter(Boolean);
+      // Set the provider to sqlite
+      if (
+        tokens[0] === "provider" &&
+        REPLACE_DBS.includes(tokens[2].replace(/"/g, ""))
+      ) {
+        tokens[2] = '"sqlite"';
+      }
+      // Set the url to a file
+      if (tokens[0] === "url") {
+        tokens[2] = SQLITE_DB_NAME;
+      }
 
-  // Find datasource block
-  const datasource = prisma.match(/datasource db \{[^}]*\}/g)[0];
-  console.log(datasource);
+      return tokens.join(" ");
+    })
+    .join("\n");
 
-  // Replace `provider = "postgres" with `provider = "sqlite"`
-  const provider = datasource.match(/provider( +)=( +)"[^"]*"/g)[0];
-  const newProvider = provider.replace("sqlite", "postgresql");
-
-  // Replace `url = ...` with `url = "file:./dev.db"`. Note that
-  // there can be multiple spaces between `url` and `=`. We
-  // replace the first occurrence of `=` with `= "file:./dev.db"`.
-  const url = datasource.match(/url( +)=( +)"[^"]*"/g);
-  console.log(url);
-  // const newUrl = url.replace("=", ' = "file:./dev.db"');
-
-  // Replace datasource block
-  const newDatasource = datasource.replace(provider, newProvider);
-  //.replace(url, newUrl);
-
-  // // Replace prisma file
-  const newPrisma = prisma.replace(datasource, newDatasource);
-  // fs.writeFileSync(prismaPath, newPrisma);
-
-  console.log("Prisma file updated");
-  console.log(newPrisma);
+  const outPath = path.join(cwd, OUT_PATH);
+  writeFileSyncRecursive(outPath, transformed);
 }
 
 run();
