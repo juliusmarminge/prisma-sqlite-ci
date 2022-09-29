@@ -61,6 +61,8 @@ async function run() {
 
   const outPath = external_path_namespaceObject.join(cwd, OUT_PATH);
   writeFileSyncRecursive(outPath, transformed);
+
+  console.log("Successfully transformed prisma schema to sqlite");
 }
 
 run();
