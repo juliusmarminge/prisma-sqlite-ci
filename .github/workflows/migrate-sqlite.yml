@@ -5,7 +5,7 @@ on:
 jobs:
   migrate-sqlite:
     env:
-      DATABASE_URL: "nonce"
+      DATABASE_URL: "file:./dev.db"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
