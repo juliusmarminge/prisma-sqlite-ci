@@ -4,8 +4,8 @@ import core from "@actions/core";
 import path from "path";
 
 async function run() {
-  const octokit = github.getOctokit(myToken);
   const myToken = core.getInput("GITHUB_TOKEN");
+  const octokit = github.getOctokit(myToken);
 
   const { data: pullRequest } = await octokit.rest.pulls.get({
     owner: "octokit",

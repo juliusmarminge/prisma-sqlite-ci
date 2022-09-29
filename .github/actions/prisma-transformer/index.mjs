@@ -9012,8 +9012,8 @@ var __webpack_exports__ = {};
 
 
 async function run() {
-  const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(myToken);
   const myToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput("GITHUB_TOKEN");
+  const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(myToken);
 
   const { data: pullRequest } = await octokit.rest.pulls.get({
     owner: "octokit",
