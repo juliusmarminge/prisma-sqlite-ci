@@ -11,7 +11,10 @@ async function run() {
   const prisma = fs.readFileSync(prismaPath, "utf8");
 
   // Remove spaces
-  const lines = prisma.split("\n").map((l) => l.trim());
+  const lines = prisma
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
   console.log(lines);
 
   // Find datasource block
@@ -19,26 +22,26 @@ async function run() {
   console.log(datasource);
 
   // Replace provider
-  const provider = datasource.match(/provider( +)=( +)"[^"]*"/g)[0];
+  const provider = datasource.match(/provider( +)=( +)"[^"]*"/g);
   console.log(provider);
-  const newProvider = provider.replace("sqlite", "postgresql");
+  // const newProvider = provider.replace("sqlite", "postgresql");
 
   // Replace url
-  const url = datasource.match(/url( +)=( +)"[^"]*"/g)[0];
+  const url = datasource.match(/url( +)=( +)"[^"]*"/g);
   console.log(url);
-  const newUrl = url.replace("postgres", "sqlite");
+  // const newUrl = url.replace("postgres", "sqlite");
 
   // Replace datasource block
-  const newDatasource = datasource
-    .replace(provider, newProvider)
-    .replace(url, newUrl);
+  // const newDatasource = datasource
+  //   .replace(provider, newProvider)
+  //   .replace(url, newUrl);
 
-  // Replace prisma file
-  const newPrisma = prisma.replace(datasource, newDatasource);
-  fs.writeFileSync(prismaPath, newPrisma);
+  // // Replace prisma file
+  // const newPrisma = prisma.replace(datasource, newDatasource);
+  // fs.writeFileSync(prismaPath, newPrisma);
 
-  console.log("Prisma file updated");
-  console.log(newPrisma);
+  // console.log("Prisma file updated");
+  // console.log(newPrisma);
 }
 
 run();
