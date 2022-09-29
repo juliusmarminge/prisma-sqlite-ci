@@ -9012,10 +9012,16 @@ var __webpack_exports__ = {};
 
 
 
+const PRISMA_PATH = "prisma/schema.prisma";
+
 async function run() {
-  console.log("Current path", path__WEBPACK_IMPORTED_MODULE_3__.resolve());
-  console.log("Current directory", process.cwd());
-  console.log("Directory contents", fs__WEBPACK_IMPORTED_MODULE_2__.readdirSync(process.cwd()));
+  const cwd = process.cwd();
+  const prismaPath = path__WEBPACK_IMPORTED_MODULE_3__.join(cwd, PRISMA_PATH);
+  const prisma = fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync(prismaPath, "utf8");
+
+  // Find datasource block
+  const datasource = prisma.match(/datasource db \{[^}]*\}/g)[0];
+  console.log(datasource);
 }
 
 run();

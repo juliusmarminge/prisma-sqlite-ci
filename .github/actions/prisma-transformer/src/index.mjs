@@ -3,10 +3,16 @@ import core from "@actions/core";
 import fs from "fs";
 import path from "path";
 
+const PRISMA_PATH = "prisma/schema.prisma";
+
 async function run() {
-  console.log("Current path", path.resolve());
-  console.log("Current directory", process.cwd());
-  console.log("Directory contents", fs.readdirSync(process.cwd()));
+  const cwd = process.cwd();
+  const prismaPath = path.join(cwd, PRISMA_PATH);
+  const prisma = fs.readFileSync(prismaPath, "utf8");
+
+  // Find datasource block
+  const datasource = prisma.match(/datasource db \{[^}]*\}/g)[0];
+  console.log(datasource);
 }
 
 run();
