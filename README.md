@@ -40,19 +40,17 @@ will be transformed to:
 
 ```prisma
 datasource db {
-    provider = "sqlite"
-    url      = "file:./dev.db"
+provider = "sqlite"
+url = "file:./dev.db"
 }
-
 // enum Role {
-//     ADMIN
-//     USER
+// ADMIN
+// USER
 // }
-
 model Example {
-    id   String @id @default(cuid())
-    name String
-    role String
+id String @id @default(cuid())
+name String
+role String
 }
 ```
 
