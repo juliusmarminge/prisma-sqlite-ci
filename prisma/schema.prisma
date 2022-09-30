@@ -10,15 +10,15 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// enum Role {
-//     ADMIN
-//     USER
-// }
+enum Role {
+    ADMIN
+    USER
+}
 
 model Example {
     id   String @id @default(cuid())
     name String
 
     // TODO Replace enums
-    // role Role
+    role Role
 }

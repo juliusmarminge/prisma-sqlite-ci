@@ -29,6 +29,18 @@ function writeFileSyncRecursive(filePath, content) {
   external_fs_namespaceObject.writeFileSync(filePath, content, "utf8");
 }
 
+function commentBlock(lines, start) {
+  for (let i = start; i < lines.length; i++) {
+    if (lines[i].startsWith("}")) {
+      console.log("commenting", lines[i]);
+      lines[i] = `// ${lines[i]}`;
+      break;
+    }
+    console.log("commenting", lines[i]);
+    lines[i] = `// ${lines[i]}`;
+  }
+}
+
 async function run() {
   const cwd = process.cwd();
   const prismaPath = external_path_namespaceObject.join(cwd, PRISMA_PATH);
@@ -37,12 +49,29 @@ async function run() {
   const lines = prisma
     .split("\n")
     .map((l) => l.trim())
-    .filter(Boolean) // Remove empty lines
-    .filter((l) => !l.startsWith("//")); // Remove comments
+    .filter(Boolean); // Remove empty lines
+
+  // Find all enums
+  let enumRefs = new Set(
+    lines
+      .map((line, i) => {
+        if (line.toLowerCase().startsWith("enum")) {
+          commentBlock(lines, i);
+          return line.split(" ")[1];
+        }
+      })
+      .filter(Boolean)
+  );
+
+  console.log(enumRefs);
 
   const transformed = lines
-    .map((line) => {
+    .map((line, i) => {
       const tokens = line.split(" ").filter(Boolean);
+      if (tokens[0].startsWith("//")) {
+        return line;
+      }
+
       // Set the provider to sqlite
       if (
         tokens[0] === "provider" &&
@@ -53,6 +82,11 @@ async function run() {
       // Set the url to a file
       if (tokens[0] === "url") {
         tokens[2] = SQLITE_DB_NAME;
+      }
+
+      // Replace all usages of the enums with strings
+      if (enumRefs.has(tokens[1])) {
+        tokens[1] = "String";
       }
 
       return tokens.join(" ");
