@@ -18,7 +18,5 @@ enum Role {
 model Example {
     id   String @id @default(cuid())
     name String
-
-    // TODO Replace enums
     role Role
 }

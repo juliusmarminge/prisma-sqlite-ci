@@ -18,11 +18,9 @@ function writeFileSyncRecursive(filePath, content) {
 function commentBlock(lines, start) {
   for (let i = start; i < lines.length; i++) {
     if (lines[i].startsWith("}")) {
-      console.log("commenting", lines[i]);
       lines[i] = `// ${lines[i]}`;
       break;
     }
-    console.log("commenting", lines[i]);
     lines[i] = `// ${lines[i]}`;
   }
 }
